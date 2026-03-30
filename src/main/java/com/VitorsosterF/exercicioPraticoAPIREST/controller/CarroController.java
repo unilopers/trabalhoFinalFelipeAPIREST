@@ -3,6 +3,7 @@ package com.VitorsosterF.exercicioPraticoAPIREST.controller;
 import com.VitorsosterF.exercicioPraticoAPIREST.model.Carro;
 import com.VitorsosterF.exercicioPraticoAPIREST.queue.CarroIntegracaoQueue;
 import com.VitorsosterF.exercicioPraticoAPIREST.repository.CarroRepository;
+import com.VitorsosterF.exercicioPraticoAPIREST.service.CarroThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +25,9 @@ public class CarroController {
 
     @PostMapping
     public Carro criarCarro(@RequestBody Carro carro) {
-        Carro salvo = carroRepository.save(carro);
-
-        integracaoQueue.enfileirar(salvo);
-
-        return salvo;
+        Carro carroSalvo = carroRepository.save(carro);
+        carroThreadService.processarEmBackground(carroSalvo);
+        return carroSalvo;
     }
 
     @GetMapping

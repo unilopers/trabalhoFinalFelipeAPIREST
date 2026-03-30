@@ -2,7 +2,7 @@ package com.VitorsosterF.exercicioPraticoAPIREST.controller;
 
 import com.VitorsosterF.exercicioPraticoAPIREST.model.Moto;
 import com.VitorsosterF.exercicioPraticoAPIREST.repository.MotoRepository;
-import com.VitorsosterF.exercicioPraticoAPIREST.service.MotoFilaService;
+import com.VitorsosterF.exercicioPraticoAPIREST.service.MotoValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class MotoController {
     private MotoRepository motoRepository;
 
     @Autowired
-    private MotoFilaService motoFilaService;
+    private MotoValidationService motoValidationService;
 
     @GetMapping
     public List<Moto> listar() {
@@ -38,7 +38,9 @@ public class MotoController {
     @PostMapping
     public Moto criar(@RequestBody Moto moto) {
         Moto motoSalva = motoRepository.save(moto);
-        motoFilaService.enfileirar(motoSalva);
+
+        motoValidationService.validarMoto(motoSalva);
+
         return motoSalva;
     }
 
